@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-huddle-dev-82652-authRole",
+      "UnauthRoleArn": "arn:aws:iam::738605061056:role/amplify-huddle-dev-82652-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::738605061056:role/amplify-huddle-dev-82652-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-huddle-dev-82652-deployment",
+      "UnauthRoleName": "amplify-huddle-dev-82652-unauthRole",
+      "StackName": "amplify-huddle-dev-82652",
+      "StackId": "arn:aws:cloudformation:us-east-2:738605061056:stack/amplify-huddle-dev-82652/c6c76ac0-c070-11eb-b5f6-020cfde5e34a",
+      "AmplifyAppId": "darbapoar54je"
+    },
+    "categories": {
+      "auth": {
+        "huddlec6bca0ab": {}
+      }
+    }
+  }
+}
