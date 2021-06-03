@@ -8,9 +8,9 @@ const Login = () => {
     return (
         <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
-                <Header as='h2' color='teal' textAlign='center'>
+                <Header as='h2' color='blue' textAlign='center'>
                     {/* <Image src='/logo.png' />  */}
-                    <Icon name='users' color='teal' />
+                    <Icon name='users' color='blue' />
                     Huddle
                 </Header>
                 <Form size='large'>
@@ -23,7 +23,7 @@ const Login = () => {
                             placeholder='Senha'
                             type='password'
                         />
-                        <Button color='teal' fluid size='large'>
+                        <Button color='blue' fluid size='large'>
                             Login
                         </Button>
                     </Segment>
