@@ -1,5 +1,20 @@
-type Todo @model {
+type User @model {
+  login: ID!
+  password: String!
+  department: String!
+  profile: Int!
+  name: String
+}
+
+type Pendency @model {
   id: ID!
   name: String!
   description: String
+  department: String!
+  createdBy: String!
+  createdAt: String!
+  status: Int!
+  local: String
+  deadline: String
+  fineshedAt: String
 }
