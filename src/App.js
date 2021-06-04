@@ -1,58 +1,61 @@
-import React, { useState, useEffect } from "react";
-import Login from "./login/Login";
-import "semantic-ui-css/semantic.min.css";
+import React, { useState, useEffect } from 'react'
+import { Grid } from 'semantic-ui-react'
+import Login from './login/Login'
+import HuddleHeader from './header/HuddleHeader'
+import PendencyCards from './cards/PendencyCards'
+import 'semantic-ui-css/semantic.min.css'
 //import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import Amplify, { API, graphqlOperation } from 'aws-amplify'
 import {
   createPendency,
   updatePendency,
   //createUser,
-} from "./graphql/mutations";
-import { listPendencys } from "./graphql/queries";
+} from './graphql/mutations'
+import { listPendencys } from './graphql/queries'
 
-import awsExports from "./aws-exports";
+import awsExports from './aws-exports'
 
-Amplify.configure(awsExports);
+Amplify.configure(awsExports)
 
 function App() {
-  const [token, setToken] = useState();
+  const [token, setToken] = useState()
 
-  const [pendencys, setPendencys] = useState({});
+  const [pendencys, setPendencys] = useState({})
 
-  console.log("pendencys", pendencys);
+  console.log('pendencys', pendencys)
 
   useEffect(() => {
-    console.log("useEffect");
-    fetchPendencys();
-  }, []);
+    console.log('useEffect')
+    fetchPendencys()
+  }, [])
 
   async function fetchPendencys() {
     try {
-      const todoData = await API.graphql(graphqlOperation(listPendencys));
-      let pendencys = {};
+      const todoData = await API.graphql(graphqlOperation(listPendencys))
+      let pendencys = {}
       todoData.data.listPendencys.items.forEach((item) => {
-        pendencys[item.id] = item;
-      });
-      setPendencys(pendencys);
+        pendencys[item.id] = item
+      })
+      setPendencys(pendencys)
     } catch (err) {
-      console.log("error fetching Pendencies");
+      console.log('error fetching Pendencies')
     }
   }
 
   async function addPendency() {
     try {
       const pendency = {
-        id: "2",
-        name: "test02",
-        department: "Adm",
-        createdBy: "admin",
+        id: '2',
+        name: 'test02',
+        department: 'Adm',
+        createdBy: 'admin',
         // createdAt: new Date().toISOString(),
         status: 0,
-      }; // required schema example
-      setPendencys({ ...pendencys, [pendency.id]: pendency });
-      await API.graphql(graphqlOperation(createPendency, { input: pendency }));
+      } // required schema example
+      setPendencys({ ...pendencys, [pendency.id]: pendency })
+      await API.graphql(graphqlOperation(createPendency, { input: pendency }))
     } catch (err) {
-      console.log("error creating pendencies:", err);
+      console.log('error creating pendencies:', err)
     }
   }
 
@@ -74,31 +77,37 @@ function App() {
   async function editPendency() {
     try {
       const pendency = {
-        id: "2",
+        id: '2',
         //name: "test02",
-        status: pendencys["2"].status + 1,
-      }; // required schema example
-      setPendencys({ ...pendencys, [pendency.id]: pendency });
-      await API.graphql(graphqlOperation(updatePendency, { input: pendency }));
+        status: pendencys['2'].status + 1,
+      } // required schema example
+      setPendencys({ ...pendencys, [pendency.id]: pendency })
+      await API.graphql(graphqlOperation(updatePendency, { input: pendency }))
     } catch (err) {
-      console.log("error update pendency:", err);
+      console.log('error update pendency:', err)
     }
   }
 
   if (!token) {
-    return <Login setToken={setToken} />;
+    return <Login setToken={setToken} />
   }
 
   return (
-    <>
-      <h1 onClick={() => addPendency()}>{pendencys["2"].status}</h1>
-      <br />
-      <h1 onClick={() => editPendency()}>{pendencys["0"].status}</h1>
-    </>
-  );
+    <Grid>
+      <Grid.Row>
+        <HuddleHeader />
+      </Grid.Row>
+      <Grid.Row style={{ height: '80vh' }}>
+        {/* <h1 onClick={() => addPendency()}>{pendencys['2'].status}</h1>
+        <br />
+        <h1 onClick={() => editPendency()}>{pendencys['0'].status}</h1> */}
+        <PendencyCards />
+      </Grid.Row>
+    </Grid>
+  )
 }
 
-export default App;
+export default App
 
 /* src/App.js */
 
