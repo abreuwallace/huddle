@@ -1,8 +1,9 @@
-import React from 'react'
-import { Card, List, Icon, Grid } from 'semantic-ui-react'
+import React, { useState } from 'react'
+import { Card, List, Icon, Grid, Button } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
+import EditModal from './EditModal'
 moment.locale('pt-br')
 
 const ListItem = styled(List.Item)`
@@ -10,7 +11,17 @@ const ListItem = styled(List.Item)`
 `
 
 const PendencyCards = ({ pendencys }) => {
-  console.log('pendency', pendencys)
+  const [visible, setVisible] = useState(false)
+  const [pendency, setPendency] = useState({})
+  
+  async function editPendency(pendency) {
+    setPendency(pendency)
+    setVisible(true)
+    // gambiarra maxima
+    await setTimeout(() => {
+      setVisible(false)
+    }, 100)
+  }
 
   const cards = Object.values(pendencys).map((pendency) => {
     return {
@@ -33,15 +44,17 @@ const PendencyCards = ({ pendencys }) => {
       color: pendency.status === 0 ? 'red' : pendency.status === 1 ? 'yellow' : 'green',
       extra: (
         <Grid>
-          <Grid.Column width={14}>
-            <Icon name="time" />
-            {pendency.fineshedAt
-              ? 'Concluído ' + moment(pendency.fineshedAt).fromNow()
-              : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
-          </Grid.Column>
-          <Grid.Column floated="right" style={{ marginRight: '8px' }}>
-            <Icon name="ellipsis vertical" />
-          </Grid.Column>
+          <Grid.Row  columns='equal' >
+            <Grid.Column>
+              <Icon name="time"/>
+              {pendency.fineshedAt
+                ? 'Concluído ' + moment(pendency.fineshedAt).fromNow()
+                : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
+            </Grid.Column>
+            <Grid.Column width={1}>
+              <Button basic compact icon='ellipsis vertical' size='mini' floated='right' onClick={()=>editPendency(pendency)}/>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       ),
     }
@@ -49,7 +62,10 @@ const PendencyCards = ({ pendencys }) => {
 
   return (
     // itemsPerRow={}
-    <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
+    <div>
+      <EditModal visible={visible} pendency={pendency}></EditModal> 
+      <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
+    </div>
   )
 }
 
