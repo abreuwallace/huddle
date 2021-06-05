@@ -14,7 +14,8 @@ type Pendency @model {
   createdBy: String!
   createdAt: String!
   status: Int!
-  local: String
+  local: String!
   deadline: String
   fineshedAt: String
+  equipment: String
 }

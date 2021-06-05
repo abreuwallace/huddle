@@ -22,8 +22,6 @@ function App() {
 
   const [pendencys, setPendencys] = useState({})
 
-  console.log('pendencys', pendencys)
-
   useEffect(() => {
     console.log('useEffect')
     fetchPendencys()
@@ -97,11 +95,12 @@ function App() {
       <Grid.Row>
         <HuddleHeader />
       </Grid.Row>
-      <Grid.Row style={{ height: '80vh' }}>
+      {/* style={{ height: '80vh' }} */}
+      <Grid.Row>
         {/* <h1 onClick={() => addPendency()}>{pendencys['2'].status}</h1>
         <br />
         <h1 onClick={() => editPendency()}>{pendencys['0'].status}</h1> */}
-        <PendencyCards />
+        <PendencyCards pendencys={pendencys} />
       </Grid.Row>
     </Grid>
   )
