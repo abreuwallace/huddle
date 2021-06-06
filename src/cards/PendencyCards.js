@@ -3,11 +3,7 @@ import { Card, List, Icon, Grid, Dropdown, Label } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
-import EditModal from '../Modals/EditModal'
-import ChangeStatusModal from '../Modals/ChangeStatusModal'
-import { deletePendency } from '../graphql/mutations'
-import { API, graphqlOperation } from 'aws-amplify'
-import _ from 'lodash'
+import { EditModal, DeleteModal, ChangeStatusModal } from '../Modals'
 moment.locale('pt-br')
 
 const ListItem = styled(List.Item)`
@@ -17,6 +13,7 @@ const ListItem = styled(List.Item)`
 const PendencyCards = ({ pendencys, setPendencys }) => {
   const [visible, setVisible] = useState(false)
   const [visibleChangeStatus, setVisibleChangeStatus] = useState(false)
+  const [visibleDelete, setVisibleDelete] = useState(false)
   const [pendency, setPendency] = useState({})
 
   function editPendency(pendency) {
@@ -27,14 +24,9 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
     setPendency(pendency)
     setVisibleChangeStatus(true)
   }
-
-  async function removePendency(id) {
-    try {
-      await API.graphql(graphqlOperation(deletePendency, { input: { id } }))
-      setPendencys(_.omit(pendencys, id))
-    } catch (err) {
-      console.log('error removing pendencies:', err)
-    }
+  function deletePendency(pendency) {
+    setPendency(pendency)
+    setVisibleDelete(true)
   }
 
   const cards = Object.values(pendencys)
@@ -89,7 +81,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
                   <Dropdown.Menu>
                     <Dropdown.Item icon="edit outline" text="Alterar Status" onClick={() => changeStatus(pendency)} />
                     <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
-                    <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => removePendency(pendency.id)} />
+                    <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => deletePendency(pendency)} />
                   </Dropdown.Menu>
                 </Dropdown>
               </Grid.Column>
@@ -114,6 +106,12 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
         pendency={pendency}
         pendencys={pendencys}
         setPendencys={setPendencys}></ChangeStatusModal>
+      <DeleteModal
+        visible={visibleDelete}
+        setVisible={setVisibleDelete}
+        pendency={pendency}
+        pendencys={pendencys}
+        setPendencys={setPendencys}></DeleteModal>
       <Card.Group items={cards} style={{ display: 'flex', justifyContent: 'center' }}></Card.Group>
     </div>
   )
