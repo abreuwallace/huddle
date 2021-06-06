@@ -51,11 +51,12 @@ export const onCreatePendency = /* GraphQL */ `
       description
       department
       createdBy
-      createdAt
       status
       local
       deadline
       fineshedAt
+      equipment
+      createdAt
       updatedAt
     }
   }
@@ -68,11 +69,12 @@ export const onUpdatePendency = /* GraphQL */ `
       description
       department
       createdBy
-      createdAt
       status
       local
       deadline
       fineshedAt
+      equipment
+      createdAt
       updatedAt
     }
   }
@@ -85,11 +87,12 @@ export const onDeletePendency = /* GraphQL */ `
       description
       department
       createdBy
-      createdAt
       status
       local
       deadline
       fineshedAt
+      equipment
+      createdAt
       updatedAt
     }
   }

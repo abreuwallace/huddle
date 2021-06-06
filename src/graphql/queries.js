@@ -44,11 +44,12 @@ export const getPendency = /* GraphQL */ `
       description
       department
       createdBy
-      createdAt
       status
       local
       deadline
       fineshedAt
+      equipment
+      createdAt
       updatedAt
     }
   }
@@ -66,11 +67,12 @@ export const listPendencys = /* GraphQL */ `
         description
         department
         createdBy
-        createdAt
         status
         local
         deadline
         fineshedAt
+        equipment
+        createdAt
         updatedAt
       }
       nextToken

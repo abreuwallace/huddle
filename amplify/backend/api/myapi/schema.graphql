@@ -12,7 +12,6 @@ type Pendency @model {
   description: String
   department: String!
   createdBy: String!
-  createdAt: String!
   status: Int!
   local: String!
   deadline: String
