@@ -6,11 +6,11 @@ import PendencyCards from './cards/PendencyCards'
 import 'semantic-ui-css/semantic.min.css'
 //import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Amplify, { API, graphqlOperation } from 'aws-amplify'
-import {
-  createPendency,
-  updatePendency,
-  //createUser,
-} from './graphql/mutations'
+// import {
+//   createPendency,
+//   updatePendency,
+//   createUser,
+// } from './graphql/mutations'
 import { listPendencys } from './graphql/queries'
 
 import awsExports from './aws-exports'
@@ -40,22 +40,22 @@ function App() {
     }
   }
 
-  async function addPendency() {
-    try {
-      const pendency = {
-        id: '2',
-        name: 'test02',
-        department: 'Adm',
-        createdBy: 'admin',
-        // createdAt: new Date().toISOString(),
-        status: 0,
-      } // required schema example
-      setPendencys({ ...pendencys, [pendency.id]: pendency })
-      await API.graphql(graphqlOperation(createPendency, { input: pendency }))
-    } catch (err) {
-      console.log('error creating pendencies:', err)
-    }
-  }
+  // async function addPendency() {
+  //   try {
+  //     const pendency = {
+  //       id: '2',
+  //       name: 'test02',
+  //       department: 'Adm',
+  //       createdBy: 'admin',
+  //       // createdAt: new Date().toISOString(),
+  //       status: 0,
+  //     } // required schema example
+  //     setPendencys({ ...pendencys, [pendency.id]: pendency })
+  //     await API.graphql(graphqlOperation(createPendency, { input: pendency }))
+  //   } catch (err) {
+  //     console.log('error creating pendencies:', err)
+  //   }
+  // }
 
   // async function addUser() {
   //   try {
@@ -72,19 +72,19 @@ function App() {
   //   }
   // }
 
-  async function editPendency() {
-    try {
-      const pendency = {
-        id: '2',
-        //name: "test02",
-        status: pendencys['2'].status + 1,
-      } // required schema example
-      setPendencys({ ...pendencys, [pendency.id]: pendency })
-      await API.graphql(graphqlOperation(updatePendency, { input: pendency }))
-    } catch (err) {
-      console.log('error update pendency:', err)
-    }
-  }
+  // async function editPendency() {
+  //   try {
+  //     const pendency = {
+  //       id: '2',
+  //       //name: "test02",
+  //       status: pendencys['2'].status + 1,
+  //     } // required schema example
+  //     setPendencys({ ...pendencys, [pendency.id]: pendency })
+  //     await API.graphql(graphqlOperation(updatePendency, { input: pendency }))
+  //   } catch (err) {
+  //     console.log('error update pendency:', err)
+  //   }
+  // }
 
   if (!token) {
     return <Login setToken={setToken} />
@@ -100,7 +100,7 @@ function App() {
         {/* <h1 onClick={() => addPendency()}>{pendencys['2'].status}</h1>
         <br />
         <h1 onClick={() => editPendency()}>{pendencys['0'].status}</h1> */}
-        <PendencyCards pendencys={pendencys} />
+        <PendencyCards pendencys={pendencys} setPendencys={setPendencys} />
       </Grid.Row>
     </Grid>
   )
