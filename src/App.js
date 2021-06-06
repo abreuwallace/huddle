@@ -5,7 +5,7 @@ import HuddleHeader from './header/HuddleHeader'
 import PendencyCards from './cards/PendencyCards'
 import 'semantic-ui-css/semantic.min.css'
 //import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Amplify, { API, graphqlOperation } from 'aws-amplify'
+import Amplify, { API, graphqlOperation, totpQrcode } from 'aws-amplify'
 import {
   createPendency,
   updatePendency,
@@ -30,11 +30,12 @@ function App() {
   async function fetchPendencys() {
     try {
       const todoData = await API.graphql(graphqlOperation(listPendencys))
-      let pendencys = {}
-      todoData.data.listPendencys.items.forEach((item) => {
-        pendencys[item.id] = item
-      })
-      setPendencys(pendencys)
+      // let pendencys = {}
+      // todoData.data.listPendencys.items.forEach((item) => {
+      //   pendencys[item.id] = item
+      // })
+      // setPendencys(pendencys)
+      setPendencys(todoData.data.listPendencys.items)
     } catch (err) {
       console.log('error fetching Pendencies')
     }
@@ -43,14 +44,14 @@ function App() {
   async function addPendency() {
     try {
       const pendency = {
-        id: '2',
+        // id: '2',
         name: 'test02',
         department: 'Adm',
         createdBy: 'admin',
         // createdAt: new Date().toISOString(),
         status: 0,
       } // required schema example
-      setPendencys({ ...pendencys, [pendency.id]: pendency })
+      // setPendencys({ ...pendencys, [pendency.id]: pendency })
       await API.graphql(graphqlOperation(createPendency, { input: pendency }))
     } catch (err) {
       console.log('error creating pendencies:', err)

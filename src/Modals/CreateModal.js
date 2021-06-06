@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Icon, Modal, Form, Message } from 'semantic-ui-react'
-import { updatePendency } from '../graphql/mutations'
+import { createPendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import moment from 'moment'
-import 'moment/locale/pt-br' // without this line it didn't work
+import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-const EditModal = ({visible, pendency}) => {
-  const [open, setOpen] = useState(false)
+const CreateModal = ({visible, setVisible}) => {
+  const moment_format = 'LLL'
+
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   
   const [name, setName] = useState('')
+  const [department, setDepartment] = useState('')
   const [local, setLocal] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
@@ -19,30 +21,37 @@ const EditModal = ({visible, pendency}) => {
 
   const [errorDeadline, setErrorDeadline] = useState(false)
 
+  const department_options = [
+    { text: 'Enfermaria', value:'Enfermaria' },
+    { text: 'Manutenção', value:'Manutenção' },
+    { text: 'Administração ', value:'Administração ' },
+    { text: 'Refeitório', value:'Refeitório' },
+    { text: 'Outros', value:'Outros' },
+  ]
+
   const status_options = [
     { text: 'Aberto', value:0 },
     { text: 'Em Andamento', value:1 },
-    { text: 'Concluído', value:2 },
+    // { text: 'Concluído', value:2 },
   ]
 
   useEffect(() => {
     if (visible) {
-      setOpen(true)
       setSubmitting(false)
       setSuccess(false)
       setErrorDeadline(false)
-      setName(pendency.name)
-      setLocal(pendency.local)
-      setDescription(pendency.description)
-      setDeadline(moment(pendency.deadline).format('LLL'))
-      setStatus(pendency.status)
+      setDeadline(moment().add(1,'day').format(moment_format))
     }
   }, [visible])
 
+
+
   const validateFields = () => {
+    console.log('sumbimit')
+
     let isValid = true
 
-    if (!moment(deadline,'LLL')._isValid){
+    if (!moment(deadline,moment_format)._isValid){
       setErrorDeadline(true)
       isValid = false
     } else{
@@ -57,19 +66,27 @@ const EditModal = ({visible, pendency}) => {
   async function handleSubmit() {
     setSubmitting(true)
     let pendency_ = {
-      id: pendency.id,
+      // id: pendency.id,
       name: name,
+      description: description,
+      department: department,
       local: local,
       description: description,
-      deadline: moment(deadline,'LLL'),
-      status: status
+      deadline: moment(deadline, moment_format).toISOString(),
+      status: status,
+      createdBy: 'admin', //
+      // createdAt: //
     }
     try {
-      let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
+      let data = await API.graphql(graphqlOperation(createPendency, { input: pendency_ }))
       console.log('data:',data)
-      // SINALIZAR Q FOI SALVO E ATUALIZAR O MURAL DPS
-      // setOpen(false)
+      // console.log(pendency_)
       setSuccess(true)
+      // await setTimeout(() => {
+      //   setSuccess(true)
+      //   setSubmitting(false)
+      // }, 1500);
+    
     } catch (err) {
       console.log('error:', err)
     }
@@ -77,36 +94,35 @@ const EditModal = ({visible, pendency}) => {
   }
 
   return (
-    <Modal closeIcon onClose={() => setOpen(false)} open={open}>
-      <Modal.Header>Gerenciar Pendência</Modal.Header>
+    <Modal closeIcon onClose={() => setVisible(false)} open={visible}>
+      <Modal.Header>Nova Pendência</Modal.Header>
       <Modal.Content>
         <Form onSubmit={() => validateFields()} loading={submitting}>
           <Form.Group widths='equal'>
             <Form.Input fluid required
-              id='form-subcomponent-shorthand-input-name'
               label='Nome'
               placeholder='Nome da Pendência'
-              defaultValue={name}
               onChange={(e, { name, value }) => setName(value)}
             />
+          <Form.Select fluid required
+            label='Setor'
+            options={department_options}
+            placeholder='Setor da Pendência'
+            onChange={(e, { name, value }) => setDepartment(value)}
+          />
           <Form.Input fluid required
-            id='form-subcomponent-shorthand-input-local'
             label='Local'
             placeholder='Local da Pendência'
-            defaultValue={local}
             onChange={(e, { name, value }) => setLocal(value)}
           />
         </Form.Group>
         <Form.Input fluid
-            id='form-subcomponent-shorthand-input-description'
             label='Descrição'
             placeholder='Descrição da Pendência'
-            defaultValue={description}
             onChange={(e, { name, value }) => setDescription(value)}
         />
         <Form.Group widths='equal'>
           <Form.Input fluid required
-            id='form-subcomponent-shorthand-input-deadline'
             label='Prazo'
             placeholder='Prazo para resolver a Pendência'
             defaultValue={deadline}
@@ -114,19 +130,18 @@ const EditModal = ({visible, pendency}) => {
             error={errorDeadline ? 'Data Inválida' : false}
           />
           <Form.Select fluid
-            id='form-subcomponent-shorthand-input-status'
             label='Status'
             options={status_options}
             defaultValue={status}
             onChange={(e, { name, value }) => setStatus(value)}
           />
         </Form.Group>
-        <Message positive hidden={!success} header='Salvo com Sucesso'/>
-        <Form.Button content='Salvar' />
+        <Message positive hidden={!success} header='Criado com Sucesso'/>
+        <Form.Button content='Criar' />
       </Form>
       </Modal.Content>
     </Modal>
   )
 }
 
-export default EditModal
+export default CreateModal

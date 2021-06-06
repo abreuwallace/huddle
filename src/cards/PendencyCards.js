@@ -3,7 +3,7 @@ import { Card, List, Icon, Grid, Button } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
-import EditModal from './EditModal'
+import EditModal from '../Modals/EditModal'
 moment.locale('pt-br')
 
 const ListItem = styled(List.Item)`
@@ -17,13 +17,9 @@ const PendencyCards = ({ pendencys }) => {
   async function editPendency(pendency) {
     setPendency(pendency)
     setVisible(true)
-    // gambiarra maxima
-    await setTimeout(() => {
-      setVisible(false)
-    }, 100)
   }
 
-  const cards = Object.values(pendencys).map((pendency) => {
+  const cards = pendencys.map((pendency) => {
     return {
       header: pendency.name,
       meta: pendency.local,
@@ -63,7 +59,7 @@ const PendencyCards = ({ pendencys }) => {
   return (
     // itemsPerRow={}
     <div>
-      <EditModal visible={visible} pendency={pendency}></EditModal> 
+      <EditModal visible={visible} setVisible={setVisible} pendency={pendency}></EditModal> 
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )
