@@ -6,11 +6,6 @@ import PendencyCards from './cards/PendencyCards'
 import 'semantic-ui-css/semantic.min.css'
 //import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Amplify, { API, graphqlOperation } from 'aws-amplify'
-// import {
-//   createPendency,
-//   updatePendency,
-//   createUser,
-// } from './graphql/mutations'
 import { listPendencys } from './graphql/queries'
 import { onCreatePendency, onUpdatePendency, onDeletePendency } from './graphql/subscriptions'
 import _ from 'lodash'
@@ -26,8 +21,10 @@ function App() {
   const [notifications, setNotifications] = useState({})
 
   useEffect(() => {
-    fetchPendencys()
-  }, [])
+    if (token?.id) {
+      fetchPendencys()
+    }
+  }, [token])
 
   useEffect(() => {
     const sub = API.graphql(graphqlOperation(onCreatePendency)).subscribe({
@@ -68,11 +65,26 @@ function App() {
     return () => sub.unsubscribe()
   }, [pendencys])
 
+  // token.profile:
+  // 0: admin/gestorGeral	verTudo  - gerenciarTudo
+  // 1: onisciente		verTudo
+  // 2: gestorSetor		verSetor - gerenciarSetor
+  // 3: geral			verSetor
+
   async function fetchPendencys() {
     try {
-      const todoData = await API.graphql(graphqlOperation(listPendencys))
       let startPendencys = {}
       let startNotifications = {}
+      let todoData
+      if (token?.profile > 1) {
+        // ver apenas o setor
+        let filter = { department: { eq: token.department } }
+        todoData = await API.graphql(graphqlOperation(listPendencys, { filter: filter }))
+      } else {
+        //admin/onisciente: ver tudo
+        todoData = await API.graphql(graphqlOperation(listPendencys))
+      }
+
       todoData.data.listPendencys.items.forEach((item) => {
         startPendencys[item.id] = item
         if (item.fineshedAt) {
@@ -117,6 +129,7 @@ function App() {
     <Grid>
       <Grid.Row>
         <HuddleHeader
+          token={token}
           setToken={setToken}
           pendencys={pendencys}
           setPendencys={setPendencys}

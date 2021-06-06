@@ -16,12 +16,23 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = ({ setToken, pendencys, setPendencys, notifications }) => {
+const HuddleHeader = ({ token, setToken, pendencys, setPendencys, notifications }) => {
   const [visible, setVisible] = useState(false)
+
+  function logout() {
+    setToken()
+    setPendencys({})
+  }
 
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
-      <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys} />
+      <CreateModal
+        token={token}
+        visible={visible}
+        setVisible={setVisible}
+        pendencys={pendencys}
+        setPendencys={setPendencys}
+      />
       <MenuHeader>
         <HeaderItem
         //active={activeItem === 'messages'}
@@ -45,7 +56,7 @@ const HuddleHeader = ({ setToken, pendencys, setPendencys, notifications }) => {
         </Menu.Item>
         <Dropdown item button direction="left" icon="user">
           <Dropdown.Menu>
-            <Dropdown.Item icon="sign-out" text="Logout" onClick={() => setToken()} />
+            <Dropdown.Item icon="sign-out" text="Logout" onClick={() => logout()} />
           </Dropdown.Menu>
         </Dropdown>
       </MenuIcons>
