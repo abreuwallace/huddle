@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Menu, Icon, Header, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
+import NotificationDropdown from '../Dropdowns/NotificationDropdown'
 import CreateModal from '../Modals/CreateModal'
 
 const MenuHeader = styled(Menu.Menu)`
@@ -15,12 +16,12 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
+const HuddleHeader = ({ setToken, pendencys, setPendencys, notifications }) => {
   const [visible, setVisible] = useState(false)
 
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
-      <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys}/>
+      <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys} />
       <MenuHeader>
         <HeaderItem
         //active={activeItem === 'messages'}
@@ -38,15 +39,15 @@ const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
         </Menu.Item>
 
         <Menu.Item position="right">
-          <Icon name="alarm" />
+          {/* <Icon name="alarm" /> */}
+          <NotificationDropdown notifications={notifications} />
           Notificação
         </Menu.Item>
-          <Dropdown item button direction='left' icon='user' >
-            <Dropdown.Menu>
-              <Dropdown.Item icon="sign-out" text="Logout" onClick={() => setToken()} />
-            </Dropdown.Menu>
-          </Dropdown>
-
+        <Dropdown item button direction="left" icon="user">
+          <Dropdown.Menu>
+            <Dropdown.Item icon="sign-out" text="Logout" onClick={() => setToken()} />
+          </Dropdown.Menu>
+        </Dropdown>
       </MenuIcons>
     </Menu>
   )
