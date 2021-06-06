@@ -12,7 +12,8 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify'
 //   createUser,
 // } from './graphql/mutations'
 import { listPendencys } from './graphql/queries'
-import { onCreatePendency } from './graphql/subscriptions'
+import { onCreatePendency, onUpdatePendency, onDeletePendency } from './graphql/subscriptions'
+import _ from 'lodash'
 
 import awsExports from './aws-exports'
 
@@ -29,9 +30,35 @@ function App() {
   useEffect(() => {
     const sub = API.graphql(graphqlOperation(onCreatePendency)).subscribe({
       next: ({ provider, value }) => {
-        //console.log('sub', { value, pendencys, provider })
+        //console.log('createSub', { value, pendencys, provider })
         const newPendency = value.data.onCreatePendency
         if (!pendencys[newPendency.id]) setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+      },
+      error: (error) => console.warn('error', error),
+    })
+
+    return () => sub.unsubscribe()
+  }, [pendencys])
+
+  useEffect(() => {
+    const sub = API.graphql(graphqlOperation(onUpdatePendency)).subscribe({
+      next: ({ provider, value }) => {
+        //console.log('updateSub', { value, pendencys, provider })
+        const newPendency = value.data.onUpdatePendency
+        setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+      },
+      error: (error) => console.warn('error', error),
+    })
+
+    return () => sub.unsubscribe()
+  }, [pendencys])
+
+  useEffect(() => {
+    const sub = API.graphql(graphqlOperation(onDeletePendency)).subscribe({
+      next: ({ provider, value }) => {
+        //console.log('onDeletePendency', { value, pendencys, provider })
+        const deletedPendency = value.data.onDeletePendency
+        setPendencys(_.omit(pendencys, deletedPendency.id))
       },
       error: (error) => console.warn('error', error),
     })
