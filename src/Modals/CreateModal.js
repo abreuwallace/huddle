@@ -17,6 +17,7 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
   const [local, setLocal] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
+  const [equipment, setEquipment] = useState('')
   const [status, setStatus] = useState(0)
 
   const [errorDeadline, setErrorDeadline] = useState(false)
@@ -67,6 +68,7 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
       department: department,
       local: local,
       deadline: moment(deadline, moment_format).toISOString(),
+      equipment: equipment,
       status: status,
       createdBy: 'admin', // pegar o usuário
     }
@@ -130,6 +132,12 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
               onChange={(e, { name, value }) => setDeadline(value)}
               error={errorDeadline ? 'Data Inválida' : false}
             />
+            <Form.Input
+              fluid
+              label="Equipamento"
+              placeholder="Equipamento"
+              onChange={(e, { name, value }) => setEquipment(value)}
+            />
             <Form.Select
               fluid
               label="Status"
@@ -137,9 +145,27 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
               defaultValue={status}
               onChange={(e, { name, value }) => setStatus(value)}
             />
+            <Form.Group widths="equal">
+              <Form.Input
+                fluid
+                required
+                label="Prazo"
+                placeholder="Prazo para resolver a Pendência"
+                defaultValue={deadline}
+                onChange={(e, { name, value }) => setDeadline(value)}
+                error={errorDeadline ? 'Data Inválida' : false}
+              />
+              <Form.Select
+                fluid
+                label="Status"
+                options={status_options}
+                defaultValue={status}
+                onChange={(e, { name, value }) => setStatus(value)}
+              />
+            </Form.Group>
+            <Message positive hidden={!success} header="Criado com Sucesso" />
+            <Form.Button content="Criar" />
           </Form.Group>
-          <Message positive hidden={!success} header="Criado com Sucesso" />
-          <Form.Button content="Criar" />
         </Form>
       </Modal.Content>
     </Modal>

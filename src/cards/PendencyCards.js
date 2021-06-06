@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Card, List, Icon, Grid, Dropdown } from 'semantic-ui-react'
+import { Card, List, Icon, Grid, Dropdown, Label } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
 import EditModal from '../Modals/EditModal'
+import ChangeStatusModal from '../Modals/ChangeStatusModal'
 import { deletePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import _ from 'lodash'
@@ -16,11 +17,16 @@ const ListItem = styled(List.Item)`
 const PendencyCards = ({ pendencys, setPendencys }) => {
   console.log('pendencys', pendencys)
   const [visible, setVisible] = useState(false)
+  const [visibleChangeStatus, setVisibleChangeStatus] = useState(false)
   const [pendency, setPendency] = useState({})
 
-  async function editPendency(pendency) {
+  function editPendency(pendency) {
     setPendency(pendency)
     setVisible(true)
+  }
+  function changeStatus(pendency) {
+    setPendency(pendency)
+    setVisibleChangeStatus(true)
   }
 
   async function removePendency(id) {
@@ -41,15 +47,25 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
       return dif
     })
     .map((pendency) => {
+      const Color = pendency.status === 0 ? 'red' : pendency.status === 1 ? 'yellow' : 'green'
       return {
         key: pendency.id,
-        header: pendency.name,
+        header: (
+          <Grid>
+            <Grid.Row columns="equal" width={12}>
+              <Grid.Column>{pendency.name}</Grid.Column>
+              <Grid.Column width={6}>
+                <Label circular as="a" color={Color}>
+                  {pendency.status === 0 ? 'Em Aberto' : pendency.status === 1 ? 'Em Andamento' : 'Concluído'}
+                </Label>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        ),
         meta: pendency.local,
         description: (
           <List>
-            <ListItem>
-              Status: {pendency.status === 0 ? 'Em Aberto' : pendency.status === 1 ? 'Em Andamento' : 'Concluído'}
-            </ListItem>
+            <ListItem>Setor: {pendency.department}</ListItem>
             <ListItem>Criado em: {moment(pendency.createdAt).format('LLL')}</ListItem>
             <ListItem>
               {pendency.fineshedAt
@@ -59,7 +75,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
             {/* <List.Item>Oranges</List.Item> */}
           </List>
         ),
-        color: pendency.status === 0 ? 'red' : pendency.status === 1 ? 'yellow' : 'green',
+        color: Color,
         extra: (
           <Grid>
             <Grid.Row columns="equal">
@@ -70,9 +86,9 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
                   : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
               </Grid.Column>
               <Grid.Column width={1} style={{ marginRight: '8px' }}>
-                {/* <Button basic compact icon='ellipsis vertical' size='mini' floated='right' onClick={()=>editPendency(pendency)}/> */}
                 <Dropdown icon="ellipsis vertical">
                   <Dropdown.Menu>
+                    <Dropdown.Item icon="edit outline" text="Alterar Status" onClick={() => changeStatus(pendency)} />
                     <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
                     <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => removePendency(pendency.id)} />
                   </Dropdown.Menu>
@@ -93,7 +109,13 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
         pendency={pendency}
         pendencys={pendencys}
         setPendencys={setPendencys}></EditModal>
-      <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
+      <ChangeStatusModal
+        visible={visibleChangeStatus}
+        setVisible={setVisibleChangeStatus}
+        pendency={pendency}
+        pendencys={pendencys}
+        setPendencys={setPendencys}></ChangeStatusModal>
+      <Card.Group items={cards} style={{ display: 'flex', 'justify-content': 'center' }}></Card.Group>
     </div>
   )
 }
