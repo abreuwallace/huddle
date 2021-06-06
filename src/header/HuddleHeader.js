@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Menu, Icon, Header } from 'semantic-ui-react'
+import { Menu, Icon, Header, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
 import CreateModal from '../Modals/CreateModal'
 
@@ -15,7 +15,7 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = () => {
+const HuddleHeader = ({ setToken }) => {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -41,10 +41,12 @@ const HuddleHeader = () => {
           <Icon name="alarm" />
           Notificação
         </Menu.Item>
-        <Menu.Item position="right">
-          <Icon name="user" />
-          Login
-        </Menu.Item>
+          <Dropdown item button direction='left' icon='user' >
+            <Dropdown.Menu>
+              <Dropdown.Item icon="sign-out" text="Logout" onClick={() => setToken()} />
+            </Dropdown.Menu>
+          </Dropdown>
+
       </MenuIcons>
     </Menu>
   )

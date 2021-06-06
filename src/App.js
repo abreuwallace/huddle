@@ -94,7 +94,7 @@ function App() {
   return (
     <Grid>
       <Grid.Row>
-        <HuddleHeader />
+        <HuddleHeader setToken={setToken}/>
       </Grid.Row>
       {/* style={{ height: '80vh' }} */}
       <Grid.Row>
