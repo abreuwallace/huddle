@@ -102,7 +102,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
     <div>
       <EditModal visible={visible} setVisible={setVisible} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></EditModal> 
       <ChangeStatusModal visible={visibleChangeStatus} setVisible={setVisibleChangeStatus} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></ChangeStatusModal>
-      <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
+      <Card.Group  items={cards} style={{ marginLeft: '1vw' }}></Card.Group>
     </div>
   )
 }
