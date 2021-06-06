@@ -24,8 +24,10 @@ function App() {
   const [pendencys, setPendencys] = useState({})
 
   useEffect(() => {
-    fetchPendencys()
-  }, [])
+    if (token?.id){
+      fetchPendencys()
+    }
+  }, [token])
 
   useEffect(() => {
     const sub = API.graphql(graphqlOperation(onCreatePendency)).subscribe({
@@ -65,11 +67,24 @@ function App() {
 
     return () => sub.unsubscribe()
   }, [pendencys])
+  
+  // token.profile:
+	// 0: admin/gestorGeral	verTudo  - gerenciarTudo
+	// 1: onisciente		verTudo
+	// 2: gestorSetor		verSetor - gerenciarSetor
+	// 3: geral			verSetor
 
   async function fetchPendencys() {
+    let pendencys = {}
     try {
-      const todoData = await API.graphql(graphqlOperation(listPendencys))
-      let pendencys = {}
+      let todoData
+      if (token?.profile > 1) { // ver apenas o setor
+        let filter = { department: {eq: token.department}}
+        todoData = await API.graphql(graphqlOperation(listPendencys, {filter: filter}))
+      }else { //admin/onisciente: ver tudo 
+        todoData = await API.graphql(graphqlOperation(listPendencys))
+      }
+      
       todoData.data.listPendencys.items.forEach((item) => {
         pendencys[item.id] = item
       })

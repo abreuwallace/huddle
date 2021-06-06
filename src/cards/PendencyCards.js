@@ -15,7 +15,6 @@ const ListItem = styled(List.Item)`
 `
 
 const PendencyCards = ({ pendencys, setPendencys }) => {
-  console.log('pendencys', pendencys)
   const [visible, setVisible] = useState(false)
   const [visibleChangeStatus, setVisibleChangeStatus] = useState(false)
   const [pendency, setPendency] = useState({})
@@ -115,7 +114,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
         pendency={pendency}
         pendencys={pendencys}
         setPendencys={setPendencys}></ChangeStatusModal>
-      <Card.Group items={cards} style={{ display: 'flex', 'justify-content': 'center' }}></Card.Group>
+      <Card.Group items={cards} style={{ display: 'flex', justifyContent: 'center' }}></Card.Group>
     </div>
   )
 }
