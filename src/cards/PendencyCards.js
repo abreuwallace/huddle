@@ -3,7 +3,7 @@ import { Card, List, Icon, Grid, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
-import EditModal from './EditModal'
+import EditModal from '../Modals/EditModal'
 import { deletePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import _ from 'lodash'
@@ -20,10 +20,6 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
   async function editPendency(pendency) {
     setPendency(pendency)
     setVisible(true)
-    // gambiarra maxima
-    await setTimeout(() => {
-      setVisible(false)
-    }, 100)
   }
 
   async function removePendency(id) {
@@ -82,7 +78,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
   return (
     // itemsPerRow={}
     <div>
-      <EditModal visible={visible} pendency={pendency}></EditModal>
+      <EditModal visible={visible} setVisible={setVisible} pendency={pendency}></EditModal> 
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )
