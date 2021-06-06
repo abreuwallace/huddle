@@ -3,7 +3,7 @@ import { Card, List, Icon, Grid, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
-import EditModal from './EditModal'
+import EditModal from '../Modals/EditModal'
 import { deletePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import _ from 'lodash'
