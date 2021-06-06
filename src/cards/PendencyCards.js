@@ -14,7 +14,7 @@ const ListItem = styled(List.Item)`
 `
 
 const PendencyCards = ({ pendencys, setPendencys }) => {
-  console.log(pendencys)
+  console.log('pendencys', pendencys)
   const [visible, setVisible] = useState(false)
   const [pendency, setPendency] = useState({})
 
@@ -32,54 +32,67 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
     }
   }
 
-  const cards = Object.values(pendencys).map((pendency) => {
-    return {
-      key: pendency.id,
-      header: pendency.name,
-      meta: pendency.local,
-      description: (
-        <List>
-          <ListItem>
-            Status: {pendency.status === 0 ? 'Em Aberto' : pendency.status === 1 ? 'Em Andamento' : 'Concluído'}
-          </ListItem>
-          <ListItem>Criado em: {moment(pendency.createdAt).format('LLL')}</ListItem>
-          <ListItem>
-            {pendency.fineshedAt
-              ? 'Conclusão: ' + moment(pendency.fineshedAt).format('LLL')
-              : 'Prazo: ' + moment(pendency.deadline).format('LLL')}
-          </ListItem>
-          {/* <List.Item>Oranges</List.Item> */}
-        </List>
-      ),
-      color: pendency.status === 0 ? 'red' : pendency.status === 1 ? 'yellow' : 'green',
-      extra: (
-        <Grid>
-          <Grid.Row columns="equal">
-            <Grid.Column>
-              <Icon name="time" />
+  const cards = Object.values(pendencys)
+    .sort((a, b) => {
+      const dif = a.status - b.status
+      if (dif === 0) {
+        return a.name.localeCompare(b.name)
+      }
+      return dif
+    })
+    .map((pendency) => {
+      return {
+        key: pendency.id,
+        header: pendency.name,
+        meta: pendency.local,
+        description: (
+          <List>
+            <ListItem>
+              Status: {pendency.status === 0 ? 'Em Aberto' : pendency.status === 1 ? 'Em Andamento' : 'Concluído'}
+            </ListItem>
+            <ListItem>Criado em: {moment(pendency.createdAt).format('LLL')}</ListItem>
+            <ListItem>
               {pendency.fineshedAt
-                ? 'Concluído ' + moment(pendency.fineshedAt).fromNow()
-                : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
-            </Grid.Column>
-            <Grid.Column width={1} style={{ marginRight: '8px' }}>
-              {/* <Button basic compact icon='ellipsis vertical' size='mini' floated='right' onClick={()=>editPendency(pendency)}/> */}
-              <Dropdown icon="ellipsis vertical">
-                <Dropdown.Menu>
-                  <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
-                  <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => removePendency(pendency.id)} />
-                </Dropdown.Menu>
-              </Dropdown>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      ),
-    }
-  })
+                ? 'Conclusão: ' + moment(pendency.fineshedAt).format('LLL')
+                : 'Prazo: ' + moment(pendency.deadline).format('LLL')}
+            </ListItem>
+            {/* <List.Item>Oranges</List.Item> */}
+          </List>
+        ),
+        color: pendency.status === 0 ? 'red' : pendency.status === 1 ? 'yellow' : 'green',
+        extra: (
+          <Grid>
+            <Grid.Row columns="equal">
+              <Grid.Column>
+                <Icon name="time" />
+                {pendency.fineshedAt
+                  ? 'Concluído ' + moment(pendency.fineshedAt).fromNow()
+                  : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
+              </Grid.Column>
+              <Grid.Column width={1} style={{ marginRight: '8px' }}>
+                {/* <Button basic compact icon='ellipsis vertical' size='mini' floated='right' onClick={()=>editPendency(pendency)}/> */}
+                <Dropdown icon="ellipsis vertical">
+                  <Dropdown.Menu>
+                    <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
+                    <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => removePendency(pendency.id)} />
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        ),
+      }
+    })
 
   return (
     // itemsPerRow={}
     <div>
-      <EditModal visible={visible} setVisible={setVisible} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></EditModal> 
+      <EditModal
+        visible={visible}
+        setVisible={setVisible}
+        pendency={pendency}
+        pendencys={pendencys}
+        setPendencys={setPendencys}></EditModal>
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )

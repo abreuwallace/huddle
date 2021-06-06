@@ -12,6 +12,7 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify'
 //   createUser,
 // } from './graphql/mutations'
 import { listPendencys } from './graphql/queries'
+import { onCreatePendency } from './graphql/subscriptions'
 
 import awsExports from './aws-exports'
 
@@ -22,9 +23,21 @@ function App() {
   const [pendencys, setPendencys] = useState({})
 
   useEffect(() => {
-    //console.log('useEffect')
     fetchPendencys()
   }, [])
+
+  useEffect(() => {
+    const sub = API.graphql(graphqlOperation(onCreatePendency)).subscribe({
+      next: ({ provider, value }) => {
+        //console.log('sub', { value, pendencys, provider })
+        const newPendency = value.data.onCreatePendency
+        if (!pendencys[newPendency.id]) setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+      },
+      error: (error) => console.warn('error', error),
+    })
+
+    return () => sub.unsubscribe()
+  }, [pendencys])
 
   async function fetchPendencys() {
     try {
@@ -93,10 +106,10 @@ function App() {
   return (
     <Grid>
       <Grid.Row>
-        <HuddleHeader setToken={setToken} pendencys={pendencys} setPendencys={setPendencys}/>
+        <HuddleHeader setToken={setToken} pendencys={pendencys} setPendencys={setPendencys} />
       </Grid.Row>
       {token?.profile > 1 && (
-        <Grid.Row centered fluid>
+        <Grid.Row centered>
           <Header as="h2" icon="address card outline" content={token.department} />
         </Grid.Row>
       )}
