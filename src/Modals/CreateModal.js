@@ -48,7 +48,7 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
   const validateFields = () => {
     let isValid = true
 
-    if (!moment(deadline, moment_format)._isValid) {
+    if (!moment(deadline,moment_format)._isValid){
       setErrorDeadline(true)
       isValid = false
     } else {
@@ -92,81 +92,52 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
       <Modal.Header>Nova Pendência</Modal.Header>
       <Modal.Content>
         <Form onSubmit={() => validateFields()} loading={submitting}>
-          <Form.Group widths="equal">
-            <Form.Input
-              fluid
-              required
-              label="Nome"
-              placeholder="Nome da Pendência"
+          <Form.Group widths='equal'>
+            <Form.Input fluid required
+              label='Nome'
+              placeholder='Nome da Pendência'
               onChange={(e, { name, value }) => setName(value)}
             />
-            <Form.Select
-              fluid
-              required
-              label="Setor"
-              options={department_options}
-              placeholder="Setor da Pendência"
-              onChange={(e, { name, value }) => setDepartment(value)}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Local"
-              placeholder="Local da Pendência"
-              onChange={(e, { name, value }) => setLocal(value)}
-            />
-          </Form.Group>
-          <Form.Input
-            fluid
-            label="Descrição"
-            placeholder="Descrição da Pendência"
-            onChange={(e, { name, value }) => setDescription(value)}
+          <Form.Select fluid required
+            label='Setor'
+            options={department_options}
+            placeholder='Setor da Pendência'
+            onChange={(e, { name, value }) => setDepartment(value)}
           />
-          <Form.Group widths="equal">
-            <Form.Input
-              fluid
-              required
-              label="Prazo"
-              placeholder="Prazo para resolver a Pendência"
-              defaultValue={deadline}
-              onChange={(e, { name, value }) => setDeadline(value)}
-              error={errorDeadline ? 'Data Inválida' : false}
-            />
-            <Form.Input
-              fluid
-              label="Equipamento"
-              placeholder="Equipamento"
-              onChange={(e, { name, value }) => setEquipment(value)}
-            />
-            <Form.Select
-              fluid
-              label="Status"
-              options={status_options}
-              defaultValue={status}
-              onChange={(e, { name, value }) => setStatus(value)}
-            />
-            <Form.Group widths="equal">
-              <Form.Input
-                fluid
-                required
-                label="Prazo"
-                placeholder="Prazo para resolver a Pendência"
-                defaultValue={deadline}
-                onChange={(e, { name, value }) => setDeadline(value)}
-                error={errorDeadline ? 'Data Inválida' : false}
-              />
-              <Form.Select
-                fluid
-                label="Status"
-                options={status_options}
-                defaultValue={status}
-                onChange={(e, { name, value }) => setStatus(value)}
-              />
-            </Form.Group>
-            <Message positive hidden={!success} header="Criado com Sucesso" />
-            <Form.Button content="Criar" />
-          </Form.Group>
-        </Form>
+          <Form.Input fluid required
+            label='Local'
+            placeholder='Local da Pendência'
+            onChange={(e, { name, value }) => setLocal(value)}
+          />
+        </Form.Group>
+        <Form.Input fluid
+            label='Descrição'
+            placeholder='Descrição da Pendência'
+            onChange={(e, { name, value }) => setDescription(value)}
+        />
+        <Form.Group widths='equal'>
+          <Form.Input fluid required
+            label='Prazo'
+            placeholder='Prazo para resolver a Pendência'
+            defaultValue={deadline}
+            onChange={(e, { name, value }) => setDeadline(value)}
+            error={errorDeadline ? 'Data Inválida' : false}
+          />
+          <Form.Input fluid 
+            label='Equipamento'
+            placeholder='Equipamento'
+            onChange={(e, { name, value }) => setEquipment(value)}
+          />
+          <Form.Select fluid
+            label='Status'
+            options={status_options}
+            defaultValue={status}
+            onChange={(e, { name, value }) => setStatus(value)}
+          />
+        </Form.Group>
+        <Message positive hidden={!success} header='Criado com Sucesso'/>
+        <Form.Button content='Criar' />
+      </Form>
       </Modal.Content>
     </Modal>
   )
