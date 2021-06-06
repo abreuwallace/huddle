@@ -14,6 +14,7 @@ const ListItem = styled(List.Item)`
 `
 
 const PendencyCards = ({ pendencys, setPendencys }) => {
+  console.log(pendencys)
   const [visible, setVisible] = useState(false)
   const [pendency, setPendency] = useState({})
 
@@ -78,7 +79,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
   return (
     // itemsPerRow={}
     <div>
-      <EditModal visible={visible} setVisible={setVisible} pendency={pendency}></EditModal> 
+      <EditModal visible={visible} setVisible={setVisible} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></EditModal> 
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )

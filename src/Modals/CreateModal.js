@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-const CreateModal = ({visible, setVisible}) => {
+const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
   const moment_format = 'LLL'
 
   const [submitting, setSubmitting] = useState(false)
@@ -47,8 +47,6 @@ const CreateModal = ({visible, setVisible}) => {
 
 
   const validateFields = () => {
-    console.log('sumbimit')
-
     let isValid = true
 
     if (!moment(deadline,moment_format)._isValid){
@@ -66,7 +64,6 @@ const CreateModal = ({visible, setVisible}) => {
   async function handleSubmit() {
     setSubmitting(true)
     let pendency_ = {
-      // id: pendency.id,
       name: name,
       description: description,
       department: department,
@@ -74,13 +71,12 @@ const CreateModal = ({visible, setVisible}) => {
       description: description,
       deadline: moment(deadline, moment_format).toISOString(),
       status: status,
-      createdBy: 'admin', //
-      // createdAt: //
+      createdBy: 'admin', // pegar o usuário
     }
     try {
       let data = await API.graphql(graphqlOperation(createPendency, { input: pendency_ }))
-      console.log('data:',data)
-      // console.log(pendency_)
+      let new_pendency = data.data.createPendency
+      setPendencys({ ...pendencys, [new_pendency.id]: new_pendency })
       setSuccess(true)
       // await setTimeout(() => {
       //   setSuccess(true)

@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
 moment.locale('pt-br')
 
-const EditModal = ({visible, setVisible, pendency}) => {
+const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [name, setName] = useState('')
@@ -64,8 +64,8 @@ const EditModal = ({visible, setVisible, pendency}) => {
     }
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
-      console.log('data:', data)
-      // SINALIZAR Q FOI SALVO E ATUALIZAR O MURAL DPS
+      let edited_pendency = data.data.updatePendency
+      setPendencys({ ...pendencys, [edited_pendency.id]: edited_pendency })
       setSuccess(true)
     } catch (err) {
       console.log('error:', err)

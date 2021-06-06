@@ -15,12 +15,12 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = ({ setToken }) => {
+const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
   const [visible, setVisible] = useState(false)
 
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
-      <CreateModal visible={visible} setVisible={setVisible}/>
+      <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys}/>
       <MenuHeader>
         <HeaderItem
         //active={activeItem === 'messages'}

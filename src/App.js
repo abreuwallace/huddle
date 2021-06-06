@@ -30,12 +30,12 @@ function App() {
   async function fetchPendencys() {
     try {
       const todoData = await API.graphql(graphqlOperation(listPendencys))
-      // let pendencys = {}
-      // todoData.data.listPendencys.items.forEach((item) => {
-      //   pendencys[item.id] = item
-      // })
-      // setPendencys(pendencys)
-      setPendencys(todoData.data.listPendencys.items)
+      let pendencys = {}
+      todoData.data.listPendencys.items.forEach((item) => {
+        pendencys[item.id] = item
+      })
+      setPendencys(pendencys)
+      // setPendencys(todoData.data.listPendencys.items)
     } catch (err) {
       console.log('error fetching Pendencies')
     }
@@ -94,7 +94,7 @@ function App() {
   return (
     <Grid>
       <Grid.Row>
-        <HuddleHeader setToken={setToken}/>
+        <HuddleHeader setToken={setToken} pendencys={pendencys} setPendencys={setPendencys}/>
       </Grid.Row>
       {/* style={{ height: '80vh' }} */}
       <Grid.Row>
