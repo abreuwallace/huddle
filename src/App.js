@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Header } from 'semantic-ui-react'
 import Login from './login/Login'
 import HuddleHeader from './header/HuddleHeader'
 import PendencyCards from './cards/PendencyCards'
@@ -19,11 +19,10 @@ Amplify.configure(awsExports)
 
 function App() {
   const [token, setToken] = useState()
-
   const [pendencys, setPendencys] = useState({})
 
   useEffect(() => {
-    console.log('useEffect')
+    //console.log('useEffect')
     fetchPendencys()
   }, [])
 
@@ -86,7 +85,7 @@ function App() {
   //   }
   // }
 
-  if (!token) {
+  if (!token?.id) {
     return <Login setToken={setToken} />
   }
 
@@ -95,6 +94,11 @@ function App() {
       <Grid.Row>
         <HuddleHeader />
       </Grid.Row>
+      {token?.profile > 1 && (
+        <Grid.Row centered fluid>
+          <Header as="h2" icon="address card outline" content={token.department} />
+        </Grid.Row>
+      )}
       {/* style={{ height: '80vh' }} */}
       <Grid.Row>
         {/* <h1 onClick={() => addPendency()}>{pendencys['2'].status}</h1>

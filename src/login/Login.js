@@ -12,11 +12,16 @@ const Login = ({ setToken }) => {
   async function handleLogin() {
     try {
       const userData = await API.graphql(graphqlOperation(getUser, { id: login }))
-      console.log('userData', userData)
-      if (userData.data.getUser.password === password) setToken(userData.data.getUser.id)
+      //console.log('userData', userData)
+      if (userData.data.getUser.password === password)
+        setToken({
+          id: userData.data.getUser.id,
+          department: userData.data.getUser.department,
+          profile: userData.data.getUser.profile,
+        })
       else setStatus('error')
     } catch (err) {
-      console.log('error fetching User')
+      console.log('error fetching User', err)
     }
   }
 
