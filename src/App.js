@@ -30,11 +30,12 @@ function App() {
   async function fetchPendencys() {
     try {
       const todoData = await API.graphql(graphqlOperation(listPendencys))
-      let pendencys = {}
-      todoData.data.listPendencys.items.forEach((item) => {
-        pendencys[item.id] = item
-      })
-      setPendencys(pendencys)
+      // let pendencys = {}
+      // todoData.data.listPendencys.items.forEach((item) => {
+      //   pendencys[item.id] = item
+      // })
+      // setPendencys(pendencys)
+      setPendencys(todoData.data.listPendencys.items)
     } catch (err) {
       console.log('error fetching Pendencies')
     }

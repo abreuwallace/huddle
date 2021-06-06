@@ -20,10 +20,6 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
   async function editPendency(pendency) {
     setPendency(pendency)
     setVisible(true)
-    // gambiarra maxima
-    await setTimeout(() => {
-      setVisible(false)
-    }, 100)
   }
 
   async function removePendency(id) {
@@ -82,7 +78,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
   return (
     // itemsPerRow={}
     <div>
-      <EditModal visible={visible} pendency={pendency}></EditModal>
+      <EditModal visible={visible} setVisible={setVisible} pendency={pendency}></EditModal> 
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )

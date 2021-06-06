@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Menu, Icon, Header } from 'semantic-ui-react'
 import styled from 'styled-components'
+import CreateModal from '../Modals/CreateModal'
 
 const MenuHeader = styled(Menu.Menu)`
   width: 82vw;
@@ -15,11 +16,11 @@ const MenuIcons = styled(Menu.Menu)`
 `
 
 const HuddleHeader = () => {
-  const newPendency = () => {
-    console.log('newPendency')
-  }
+  const [visible, setVisible] = useState(false)
+
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
+      <CreateModal visible={visible} setVisible={setVisible}/>
       <MenuHeader>
         <HeaderItem
         //active={activeItem === 'messages'}
@@ -31,7 +32,7 @@ const HuddleHeader = () => {
         </HeaderItem>
       </MenuHeader>
       <MenuIcons>
-        <Menu.Item position="right" onClick={() => newPendency()}>
+        <Menu.Item position="right" onClick={() => setVisible(true)}>
           <Icon name="plus" />
           Novo
         </Menu.Item>

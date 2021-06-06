@@ -6,8 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
 moment.locale('pt-br')
 
-const EditModal = ({ visible, pendency }) => {
-  const [open, setOpen] = useState(false)
+const EditModal = ({visible, setVisible, pendency}) => {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [name, setName] = useState('')
@@ -26,7 +25,6 @@ const EditModal = ({ visible, pendency }) => {
 
   useEffect(() => {
     if (visible) {
-      setOpen(true)
       setSubmitting(false)
       setSuccess(false)
       setErrorDeadline(false)
@@ -60,14 +58,14 @@ const EditModal = ({ visible, pendency }) => {
       name: name,
       local: local,
       description: description,
-      deadline: moment(deadline, 'LLL'),
+      deadline: moment(deadline,'LLL'),
       status: status,
+      // fineshedAt:
     }
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
       console.log('data:', data)
       // SINALIZAR Q FOI SALVO E ATUALIZAR O MURAL DPS
-      // setOpen(false)
       setSuccess(true)
     } catch (err) {
       console.log('error:', err)
@@ -76,7 +74,7 @@ const EditModal = ({ visible, pendency }) => {
   }
 
   return (
-    <Modal closeIcon onClose={() => setOpen(false)} open={open}>
+    <Modal closeIcon onClose={() => setVisible(false)} open={visible}>
       <Modal.Header>Gerenciar Pendência</Modal.Header>
       <Modal.Content>
         <Form onSubmit={() => validateFields()} loading={submitting}>
