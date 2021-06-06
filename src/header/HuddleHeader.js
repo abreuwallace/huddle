@@ -18,6 +18,11 @@ const MenuIcons = styled(Menu.Menu)`
 const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
   const [visible, setVisible] = useState(false)
 
+  function logout(){
+    setToken()
+    setPendencys({})
+  }
+
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
       <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys}/>
@@ -43,7 +48,7 @@ const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
         </Menu.Item>
           <Dropdown item button direction='left' icon='user' >
             <Dropdown.Menu>
-              <Dropdown.Item icon="sign-out" text="Logout" onClick={() => setToken()} />
+              <Dropdown.Item icon="sign-out" text="Logout" onClick={() => logout()} />
             </Dropdown.Menu>
           </Dropdown>
 
