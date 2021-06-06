@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Icon, Modal, Form } from 'semantic-ui-react'
+import { Button, Icon, Modal, Form, Message } from 'semantic-ui-react'
 import { updatePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
+import moment from 'moment'
+import 'moment/locale/pt-br' // without this line it didn't work
+moment.locale('pt-br')
 
 const EditModal = ({visible, pendency}) => {
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState(false)
   
   const [name, setName] = useState('')
   const [local, setLocal] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
   const [status, setStatus] = useState(0)
+
+  const [errorDeadline, setErrorDeadline] = useState(false)
 
   const status_options = [
     { text: 'Aberto', value:0 },
@@ -23,13 +29,30 @@ const EditModal = ({visible, pendency}) => {
     if (visible) {
       setOpen(true)
       setSubmitting(false)
+      setSuccess(false)
+      setErrorDeadline(false)
       setName(pendency.name)
       setLocal(pendency.local)
       setDescription(pendency.description)
-      setDeadline(pendency.deadline)
+      setDeadline(moment(pendency.deadline).format('LLL'))
       setStatus(pendency.status)
     }
   }, [visible])
+
+  const validateFields = () => {
+    let isValid = true
+
+    if (!moment(deadline,'LLL')._isValid){
+      setErrorDeadline(true)
+      isValid = false
+    } else{
+      setErrorDeadline(false)
+    }
+
+    if (isValid){
+      handleSubmit()
+    }
+  }
 
   async function handleSubmit() {
     setSubmitting(true)
@@ -38,33 +61,35 @@ const EditModal = ({visible, pendency}) => {
       name: name,
       local: local,
       description: description,
-      deadline: deadline,
+      deadline: moment(deadline,'LLL'),
       status: status
     }
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
       console.log('data:',data)
       // SINALIZAR Q FOI SALVO E ATUALIZAR O MURAL DPS
-      setOpen(false)
+      // setOpen(false)
+      setSuccess(true)
     } catch (err) {
       console.log('error:', err)
     }
+    setSubmitting(false)
   }
 
   return (
     <Modal closeIcon onClose={() => setOpen(false)} open={open}>
       <Modal.Header>Gerenciar Pendência</Modal.Header>
       <Modal.Content>
-        <Form onSubmit={() => handleSubmit()}>
+        <Form onSubmit={() => validateFields()} loading={submitting}>
           <Form.Group widths='equal'>
-            <Form.Input fluid
+            <Form.Input fluid required
               id='form-subcomponent-shorthand-input-name'
               label='Nome'
               placeholder='Nome da Pendência'
               defaultValue={name}
               onChange={(e, { name, value }) => setName(value)}
             />
-          <Form.Input fluid
+          <Form.Input fluid required
             id='form-subcomponent-shorthand-input-local'
             label='Local'
             placeholder='Local da Pendência'
@@ -80,12 +105,13 @@ const EditModal = ({visible, pendency}) => {
             onChange={(e, { name, value }) => setDescription(value)}
         />
         <Form.Group widths='equal'>
-          <Form.Input fluid
+          <Form.Input fluid required
             id='form-subcomponent-shorthand-input-deadline'
             label='Prazo'
             placeholder='Prazo para resolver a Pendência'
             defaultValue={deadline}
-            // onChange={(e, { name, value }) => setDeadline(value)}
+            onChange={(e, { name, value }) => setDeadline(value)}
+            error={errorDeadline ? 'Data Inválida' : false}
           />
           <Form.Select fluid
             id='form-subcomponent-shorthand-input-status'
@@ -95,21 +121,10 @@ const EditModal = ({visible, pendency}) => {
             onChange={(e, { name, value }) => setStatus(value)}
           />
         </Form.Group>
-        <Form.Button content='Salvar' loading={submitting} disabled={submitting} />
+        <Message positive hidden={!success} header='Salvo com Sucesso'/>
+        <Form.Button content='Salvar' />
       </Form>
       </Modal.Content>
-      {/* <Modal.Actions>
-        <Button color='black' onClick={() => setOpen(false)}>
-          Cancelar
-        </Button>
-        <Button
-          content="Salvar"
-          labelPosition='right'
-          icon='checkmark'
-          onClick={() => setOpen(false)}
-          positive
-        />
-      </Modal.Actions> */}
     </Modal>
   )
 }

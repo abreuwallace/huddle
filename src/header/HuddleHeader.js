@@ -15,6 +15,9 @@ const MenuIcons = styled(Menu.Menu)`
 `
 
 const HuddleHeader = () => {
+  const newPendency = () => {
+    console.log('newPendency')
+  }
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
       <MenuHeader>
@@ -28,7 +31,7 @@ const HuddleHeader = () => {
         </HeaderItem>
       </MenuHeader>
       <MenuIcons>
-        <Menu.Item position="right">
+        <Menu.Item position="right" onClick={() => newPendency()}>
           <Icon name="plus" />
           Novo
         </Menu.Item>
