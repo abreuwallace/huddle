@@ -8,6 +8,7 @@ import ChangeStatusModal from '../Modals/ChangeStatusModal'
 import { deletePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import _ from 'lodash'
+import { findByLabelText } from '@testing-library/dom'
 moment.locale('pt-br')
 
 const ListItem = styled(List.Item)`
@@ -102,7 +103,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
     <div>
       <EditModal visible={visible} setVisible={setVisible} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></EditModal> 
       <ChangeStatusModal visible={visibleChangeStatus} setVisible={setVisibleChangeStatus} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></ChangeStatusModal>
-      <Card.Group  items={cards} style={{ marginLeft: '1vw' }}></Card.Group>
+      <Card.Group  items={cards} style={{display:'flex', 'justify-content':'center' }}></Card.Group>
     </div>
   )
 }
