@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 moment.locale('pt-br')
 
-const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
+const CreateModal = ({ token, visible, setVisible, pendencys, setPendencys }) => {
   const moment_format = 'LLL'
 
   const [submitting, setSubmitting] = useState(false)
@@ -70,7 +70,7 @@ const CreateModal = ({ visible, setVisible, pendencys, setPendencys }) => {
       deadline: moment(deadline, moment_format).toISOString(),
       equipment: equipment,
       status: status,
-      createdBy: 'admin', // pegar o usuário
+      createdBy: token.id // pegar o usuário
     }
     try {
       let data = await API.graphql(graphqlOperation(createPendency, { input: pendency_ }))

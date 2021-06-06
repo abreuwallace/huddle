@@ -6,11 +6,6 @@ import PendencyCards from './cards/PendencyCards'
 import 'semantic-ui-css/semantic.min.css'
 //import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Amplify, { API, graphqlOperation } from 'aws-amplify'
-// import {
-//   createPendency,
-//   updatePendency,
-//   createUser,
-// } from './graphql/mutations'
 import { listPendencys } from './graphql/queries'
 import { onCreatePendency, onUpdatePendency, onDeletePendency } from './graphql/subscriptions'
 import _ from 'lodash'
@@ -67,7 +62,7 @@ function App() {
 
     return () => sub.unsubscribe()
   }, [pendencys])
-  
+
   // token.profile:
 	// 0: admin/gestorGeral	verTudo  - gerenciarTudo
 	// 1: onisciente		verTudo
@@ -148,7 +143,7 @@ function App() {
   return (
     <Grid>
       <Grid.Row>
-        <HuddleHeader setToken={setToken} pendencys={pendencys} setPendencys={setPendencys} />
+        <HuddleHeader token={token} setToken={setToken} pendencys={pendencys} setPendencys={setPendencys} />
       </Grid.Row>
       {token?.profile > 1 && (
         <Grid.Row centered>

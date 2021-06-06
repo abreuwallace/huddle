@@ -15,7 +15,7 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
+const HuddleHeader = ({ token, setToken, pendencys, setPendencys }) => {
   const [visible, setVisible] = useState(false)
 
   function logout(){
@@ -25,7 +25,7 @@ const HuddleHeader = ({ setToken, pendencys, setPendencys }) => {
 
   return (
     <Menu color={'blue'} inverted fluid borderless size="tiny" icon="labeled">
-      <CreateModal visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys}/>
+      <CreateModal token={token} visible={visible} setVisible={setVisible} pendencys={pendencys} setPendencys={setPendencys}/>
       <MenuHeader>
         <HeaderItem
         //active={activeItem === 'messages'}
