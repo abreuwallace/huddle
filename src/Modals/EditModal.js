@@ -7,39 +7,30 @@ import 'moment/locale/pt-br' // without this line it didn't work
 moment.locale('pt-br')
 
 const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => {
+  const moment_format = 'LLL'
+
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [name, setName] = useState('')
   const [local, setLocal] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
-  const [status, setStatus] = useState(0)
+  const [equipment, setEquipment] = useState('')
 
   const [errorDeadline, setErrorDeadline] = useState(false)
 
-  const status_options = [
-    { text: 'Aberto', value: 0 },
-    { text: 'Em Andamento', value: 1 },
-    { text: 'Concluído', value: 2 },
-  ]
-
   useEffect(() => {
+    setDeadline(moment(pendency.deadline).format('LLL'))
     if (visible) {
       setSubmitting(false)
       setSuccess(false)
       setErrorDeadline(false)
-      setName(pendency.name)
-      setLocal(pendency.local)
-      setDescription(pendency.description)
-      setDeadline(moment(pendency.deadline).format('LLL'))
-      setStatus(pendency.status)
     }
   }, [visible, pendency])
 
   const validateFields = () => {
     let isValid = true
-
-    if (!moment(deadline, 'LLL')._isValid) {
+    if (!moment(deadline, moment_format)._isValid) {
       setErrorDeadline(true)
       isValid = false
     } else {
@@ -58,9 +49,8 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       name: name,
       local: local,
       description: description,
-      deadline: moment(deadline,'LLL'),
-      status: status,
-      // fineshedAt:
+      deadline: moment(deadline,moment_format).toISOString(),
+      equipment: equipment
     }
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
@@ -79,51 +69,38 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       <Modal.Content>
         <Form onSubmit={() => validateFields()} loading={submitting}>
           <Form.Group widths="equal">
-            <Form.Input
-              fluid
-              required
-              id="form-subcomponent-shorthand-input-name"
+            <Form.Input fluid required
               label="Nome"
               placeholder="Nome da Pendência"
-              defaultValue={name}
+              defaultValue={pendency.name}
               onChange={(e, { name, value }) => setName(value)}
             />
-            <Form.Input
-              fluid
-              required
-              id="form-subcomponent-shorthand-input-local"
+            <Form.Input fluid required
               label="Local"
               placeholder="Local da Pendência"
-              defaultValue={local}
+              defaultValue={pendency.local}
               onChange={(e, { name, value }) => setLocal(value)}
             />
           </Form.Group>
-          <Form.Input
-            fluid
-            id="form-subcomponent-shorthand-input-description"
+          <Form.Input fluid
             label="Descrição"
             placeholder="Descrição da Pendência"
-            defaultValue={description}
+            defaultValue={pendency.description}
             onChange={(e, { name, value }) => setDescription(value)}
           />
           <Form.Group widths="equal">
-            <Form.Input
-              fluid
-              required
-              id="form-subcomponent-shorthand-input-deadline"
+            <Form.Input fluid required
               label="Prazo"
               placeholder="Prazo para resolver a Pendência"
-              defaultValue={deadline}
+              defaultValue={moment(pendency.deadline).format(moment_format)}
               onChange={(e, { name, value }) => setDeadline(value)}
               error={errorDeadline ? 'Data Inválida' : false}
             />
-            <Form.Select
-              fluid
-              id="form-subcomponent-shorthand-input-status"
-              label="Status"
-              options={status_options}
-              defaultValue={status}
-              onChange={(e, { name, value }) => setStatus(value)}
+            <Form.Input fluid
+              label="Equipamento"
+              placeholder="Equipamento"
+              defaultValue={pendency.equipment}
+              onChange={(e, { name, value }) => setEquipment(value)}
             />
           </Form.Group>
           <Message positive hidden={!success} header="Salvo com Sucesso" />

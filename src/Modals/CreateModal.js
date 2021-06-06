@@ -17,6 +17,7 @@ const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
   const [local, setLocal] = useState('')
   const [description, setDescription] = useState('')
   const [deadline, setDeadline] = useState('')
+  const [equipment, setEquipment] = useState('')
   const [status, setStatus] = useState(0)
 
   const [errorDeadline, setErrorDeadline] = useState(false)
@@ -44,8 +45,6 @@ const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
     }
   }, [visible])
 
-
-
   const validateFields = () => {
     let isValid = true
 
@@ -70,6 +69,7 @@ const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
       local: local,
       description: description,
       deadline: moment(deadline, moment_format).toISOString(),
+      equipment: equipment,
       status: status,
       createdBy: 'admin', // pegar o usuário
     }
@@ -78,11 +78,6 @@ const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
       let new_pendency = data.data.createPendency
       setPendencys({ ...pendencys, [new_pendency.id]: new_pendency })
       setSuccess(true)
-      // await setTimeout(() => {
-      //   setSuccess(true)
-      //   setSubmitting(false)
-      // }, 1500);
-    
     } catch (err) {
       console.log('error:', err)
     }
@@ -124,6 +119,11 @@ const CreateModal = ({visible, setVisible, pendencys, setPendencys }) => {
             defaultValue={deadline}
             onChange={(e, { name, value }) => setDeadline(value)}
             error={errorDeadline ? 'Data Inválida' : false}
+          />
+          <Form.Input fluid 
+            label='Equipamento'
+            placeholder='Equipamento'
+            onChange={(e, { name, value }) => setEquipment(value)}
           />
           <Form.Select fluid
             label='Status'

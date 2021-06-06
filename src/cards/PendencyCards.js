@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
 import EditModal from '../Modals/EditModal'
+import ChangeStatusModal from '../Modals/ChangeStatusModal'
 import { deletePendency } from '../graphql/mutations'
 import { API, graphqlOperation } from 'aws-amplify'
 import _ from 'lodash'
@@ -16,11 +17,16 @@ const ListItem = styled(List.Item)`
 const PendencyCards = ({ pendencys, setPendencys }) => {
   console.log(pendencys)
   const [visible, setVisible] = useState(false)
+  const [visibleChangeStatus, setVisibleChangeStatus] = useState(false)
   const [pendency, setPendency] = useState({})
 
-  async function editPendency(pendency) {
+  function editPendency(pendency) {
     setPendency(pendency)
     setVisible(true)
+  }
+  function changeStatus(pendency) {
+    setPendency(pendency)
+    setVisibleChangeStatus(true)
   }
 
   async function removePendency(id) {
@@ -62,9 +68,9 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
                 : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
             </Grid.Column>
             <Grid.Column width={1} style={{ marginRight: '8px' }}>
-              {/* <Button basic compact icon='ellipsis vertical' size='mini' floated='right' onClick={()=>editPendency(pendency)}/> */}
               <Dropdown icon="ellipsis vertical">
                 <Dropdown.Menu>
+                  <Dropdown.Item icon="edit outline" text="Alterar Status" onClick={() => changeStatus(pendency)} />
                   <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
                   <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => removePendency(pendency.id)} />
                 </Dropdown.Menu>
@@ -80,6 +86,7 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
     // itemsPerRow={}
     <div>
       <EditModal visible={visible} setVisible={setVisible} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></EditModal> 
+      <ChangeStatusModal visible={visibleChangeStatus} setVisible={setVisibleChangeStatus} pendency={pendency} pendencys={pendencys} setPendencys={setPendencys}></ChangeStatusModal>
       <Card.Group centered items={cards} style={{ marginLeft: '4vw' }}></Card.Group>
     </div>
   )
