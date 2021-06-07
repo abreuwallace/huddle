@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon, Dropdown, Header, Label } from 'semantic-ui-react'
 import styled from 'styled-components'
+import moment from 'moment'
 
 const NotIcon = styled(Icon)`
   margin-bottom: 4px !important;
@@ -14,7 +15,7 @@ const NotificationDropdown = ({ notifications, newsCount, setNewsCount }) => {
         key: id,
         text: each.name,
         value: id,
-        content: <Header content={each.name} subheader={each.when} />, //icon={each.icon}
+        content: <Header content={each.name} subheader={each.action + ' ' + moment(each.time).fromNow()} />, //icon={each.icon}
       }
     })
 

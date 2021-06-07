@@ -9,7 +9,7 @@ import Amplify, { API, graphqlOperation } from 'aws-amplify'
 import { listPendencys } from './graphql/queries'
 import { onCreatePendency, onUpdatePendency, onDeletePendency } from './graphql/subscriptions'
 import _ from 'lodash'
-import moment from 'moment'
+//import moment from 'moment'
 
 import awsExports from './aws-exports'
 
@@ -38,7 +38,8 @@ function App() {
             ...notifications,
             [newPendency.id]: {
               name: `Pendência ${newPendency.name}`,
-              when: `Criada ${moment(newPendency.createdAt).fromNow()}`,
+              //when: `Criada ${moment(newPendency.createdAt).fromNow()}`,
+              action: 'Criada',
               time: newPendency.createdAt,
               icon: 'plus',
             },
@@ -62,9 +63,10 @@ function App() {
           ...notifications,
           [newPendency.id]: {
             name: `Pendência ${newPendency.name}`,
-            when: `Alterada ${moment(newPendency.updatedAt).fromNow()}`,
+            //when: `Alterada ${moment(newPendency.updatedAt).fromNow()}`,
             time: newPendency.updatedAt,
             icon: 'edit',
+            action: 'Alterada',
           },
         })
         setNewsCount(newsCount + 1)
@@ -85,9 +87,10 @@ function App() {
           ...notifications,
           [deletedPendency.id]: {
             name: `Pendência ${deletedPendency.name}`,
-            when: `Removida ${moment().fromNow()}`,
+            //when: `Removida ${moment().fromNow()}`,
             time: new Date().toISOString(),
             icon: 'trash',
+            action: 'Removida',
           },
         })
         setNewsCount(newsCount + 1)
@@ -123,26 +126,29 @@ function App() {
         if (item.fineshedAt) {
           startNotifications[item.id] = {
             name: `Pendência ${item.name}`,
-            when: `Concluída ${moment(item.fineshedAt).fromNow()}`,
+            //when: `Concluída ${moment(item.fineshedAt).fromNow()}`,
             time: item.fineshedAt,
             icon: 'check',
+            action: 'Concluída',
           }
         } else {
           if (item.updatedAt !== item.createdAt) {
             startNotifications[item.id] = {
               //message: `Pendência ${item.name} Alterada ${moment(item.updatedAt).fromNow()}`,
               name: `Pendência ${item.name}`,
-              when: `Alterada ${moment(item.updatedAt).fromNow()}`,
+              //when: `Alterada ${moment(item.updatedAt).fromNow()}`,
               time: item.updatedAt,
               icon: 'edit',
+              action: 'Editada',
             }
           } else {
             startNotifications[item.id] = {
               //message: `Pendência ${item.name} Criada ${moment(item.createdAt).fromNow()}`,
               name: `Pendência ${item.name}`,
-              when: `Criada ${moment(item.createdAt).fromNow()}`,
+              //when: `Criada ${moment(item.createdAt).fromNow()}`,
               time: item.createdAt,
               icon: 'plus',
+              action: 'Criada',
             }
           }
         }
