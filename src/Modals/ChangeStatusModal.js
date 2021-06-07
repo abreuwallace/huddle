@@ -23,7 +23,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
       setSubmitting(false)
       setSuccess(false)
     }
-  }, [visible])
+  }, [visible, pendency])
 
   async function handleSubmit() {
     setSubmitting(true)
@@ -67,7 +67,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
             onChange={(e, { name, value }) => setStatus(value)}
           />
           <Message positive hidden={!success} header="Status alterado com Sucesso" />
-          <Form.Button content="Alterar" disabled={(status === pendency.status) || success} />
+          <Form.Button content="Alterar" disabled={status === pendency.status || success} />
         </Form>
       </Modal.Content>
     </Modal>

@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br' // without this line it didn't work
 moment.locale('pt-br')
 
-const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => {
+const EditModal = ({ visible, setVisible, pendency, pendencys, setPendencys }) => {
   const moment_format = 'LLL'
 
   const [submitting, setSubmitting] = useState(false)
@@ -26,7 +26,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       setSuccess(false)
       setErrorDeadline(false)
     }
-  }, [visible])
+  }, [visible, pendency])
 
   const validateFields = () => {
     let isValid = true
@@ -49,8 +49,8 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       name: name,
       local: local,
       description: description,
-      deadline: moment(deadline,moment_format).toISOString(),
-      equipment: equipment
+      deadline: moment(deadline, moment_format).toISOString(),
+      equipment: equipment,
     }
     console.log(pendency_, name, local)
     try {
@@ -73,34 +73,42 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       <Modal.Content>
         <Form onSubmit={() => validateFields()} loading={submitting}>
           <Form.Group widths="equal">
-            <Form.Input fluid required
+            <Form.Input
+              fluid
+              required
               label="Nome"
               placeholder="Nome da Pendência"
               defaultValue={pendency.name}
               onChange={(e, { name, value }) => setName(value)}
             />
-            <Form.Input fluid required
+            <Form.Input
+              fluid
+              required
               label="Local"
               placeholder="Local da Pendência"
               defaultValue={pendency.local}
               onChange={(e, { name, value }) => setLocal(value)}
             />
           </Form.Group>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Descrição"
             placeholder="Descrição da Pendência"
             defaultValue={pendency.description}
             onChange={(e, { name, value }) => setDescription(value)}
           />
           <Form.Group widths="equal">
-            <Form.Input fluid required
+            <Form.Input
+              fluid
+              required
               label="Prazo"
               placeholder="Prazo para resolver a Pendência"
               defaultValue={moment(pendency.deadline).format(moment_format)}
               onChange={(e, { name, value }) => setDeadline(value)}
               error={errorDeadline ? 'Data Inválida' : false}
             />
-            <Form.Input fluid
+            <Form.Input
+              fluid
               label="Equipamento"
               placeholder="Equipamento"
               defaultValue={pendency.equipment}
