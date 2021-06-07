@@ -181,7 +181,7 @@ function App() {
         {/* <h1 onClick={() => addPendency()}>{pendencys['2'].status}</h1>
         <br />
         <h1 onClick={() => editPendency()}>{pendencys['0'].status}</h1> */}
-        <PendencyCards pendencys={pendencys} setPendencys={setPendencys} />
+        <PendencyCards token={token} pendencys={pendencys} setPendencys={setPendencys} />
       </Grid.Row>
     </Grid>
   )

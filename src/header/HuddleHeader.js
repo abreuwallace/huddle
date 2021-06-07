@@ -44,11 +44,12 @@ const HuddleHeader = ({ token, setToken, pendencys, setPendencys, notifications,
         </HeaderItem>
       </MenuHeader>
       <MenuIcons>
+        {(token.profile===0 ||token.profile===2) &&(
         <Menu.Item position="right" onClick={() => setVisible(true)}>
           <Icon name="plus" />
           Novo
         </Menu.Item>
-
+        )}
         <Menu.Item position="right">
           {/* <Icon name="alarm" /> */}
           <NotificationDropdown notifications={notifications} newsCount={newsCount} setNewsCount={setNewsCount} />

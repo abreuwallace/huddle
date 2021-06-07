@@ -10,7 +10,7 @@ const ListItem = styled(List.Item)`
   margin-bottom: 3px;
 `
 
-const PendencyCards = ({ pendencys, setPendencys }) => {
+const PendencyCards = ({ token, pendencys, setPendencys }) => {
   const [visible, setVisible] = useState(false)
   const [visibleChangeStatus, setVisibleChangeStatus] = useState(false)
   const [visibleDelete, setVisibleDelete] = useState(false)
@@ -76,15 +76,17 @@ const PendencyCards = ({ pendencys, setPendencys }) => {
                   ? 'Concluído ' + moment(pendency.fineshedAt).fromNow()
                   : 'Expiração do prazo ' + moment(pendency.deadline).fromNow()}
               </Grid.Column>
-              <Grid.Column width={1} style={{ marginRight: '8px' }}>
-                <Dropdown icon="ellipsis vertical">
-                  <Dropdown.Menu>
-                    <Dropdown.Item icon="edit outline" text="Alterar Status" onClick={() => changeStatus(pendency)} />
-                    <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
-                    <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => deletePendency(pendency)} />
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Grid.Column>
+              {(token.profile===0 ||token.profile===2) &&(
+                <Grid.Column width={1} style={{ marginRight: '8px' }}>
+                  <Dropdown icon="ellipsis vertical">
+                    <Dropdown.Menu>
+                      <Dropdown.Item icon="edit outline" text="Alterar Status" onClick={() => changeStatus(pendency)} />
+                      <Dropdown.Item icon="edit" text="Editar Pendência" onClick={() => editPendency(pendency)} />
+                      <Dropdown.Item icon="trash" text="Excluir Pendência" onClick={() => deletePendency(pendency)} />
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Grid.Column>
+              )}
             </Grid.Row>
           </Grid>
         ),
