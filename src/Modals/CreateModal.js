@@ -22,13 +22,19 @@ const CreateModal = ({ token, visible, setVisible, pendencys, setPendencys }) =>
 
   const [errorDeadline, setErrorDeadline] = useState(false)
 
-  const department_options = [
+  let department_options = [
     { text: 'Enfermaria', value: 'Enfermaria' },
     { text: 'Manutenção', value: 'Manutenção' },
     { text: 'Administração ', value: 'Administração ' },
     { text: 'Refeitório', value: 'Refeitório' },
     { text: 'Outros', value: 'Outros' },
   ]
+
+  if (token.profile === 2){
+    department_options = [
+      { text: token.department, value: token.department }
+    ]
+  }
 
   const status_options = [
     { text: 'Aberto', value: 0 },
