@@ -23,7 +23,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
       setSubmitting(false)
       setSuccess(false)
     }
-  }, [visible, pendency])
+  }, [visible])
 
   async function handleSubmit() {
     setSubmitting(true)
@@ -45,7 +45,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
       let edited_pendency = data.data.updatePendency
       setPendencys({ ...pendencys, [edited_pendency.id]: edited_pendency })
       setSuccess(true)
-      await setTimeout(() => {
+      setTimeout(() => {
         setVisible(false)
       }, 2000)
     } catch (err) {
@@ -67,7 +67,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
             onChange={(e, { name, value }) => setStatus(value)}
           />
           <Message positive hidden={!success} header="Status alterado com Sucesso" />
-          <Form.Button content="Alterar" disabled={status === pendency.status} />
+          <Form.Button content="Alterar" disabled={(status === pendency.status) || success} />
         </Form>
       </Modal.Content>
     </Modal>

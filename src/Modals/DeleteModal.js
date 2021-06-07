@@ -22,9 +22,13 @@ const DeleteModal = ({visible, setVisible, pendency, pendencys, setPendencys }) 
       await API.graphql(graphqlOperation(deletePendency, { input: pendency_ }))
       setPendencys(_.omit(pendencys, pendency.id))
       setSuccess(true)
+      setTimeout(() => {
+        setVisible(false)
+      }, 2000)
     } catch (err) {
       console.log('error removing pendencies:', err)
     }
+    setSubmitting(false)
   }
 
   return (
@@ -35,10 +39,10 @@ const DeleteModal = ({visible, setVisible, pendency, pendencys, setPendencys }) 
         <Message positive attached hidden={!success} header='Pendência excluida'/>
       </Modal.Content>
       <Modal.Actions>
-          <Button negative disabled={submitting} onClick={() => setVisible(false)}>
+          <Button negative disabled={success||submitting} onClick={() => setVisible(false)}>
             Cancelar
           </Button>
-          <Button positive disabled={submitting} onClick={() => handleSubmit()}>
+          <Button positive disabled={success||submitting} loading={submitting} onClick={() => handleSubmit()}>
             Excluir
           </Button>
         </Modal.Actions>

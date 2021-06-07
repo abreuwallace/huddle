@@ -26,7 +26,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       setSuccess(false)
       setErrorDeadline(false)
     }
-  }, [visible, pendency])
+  }, [visible])
 
   const validateFields = () => {
     let isValid = true
@@ -52,11 +52,15 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       deadline: moment(deadline,moment_format).toISOString(),
       equipment: equipment
     }
+    console.log(pendency_, name, local)
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
       let edited_pendency = data.data.updatePendency
       setPendencys({ ...pendencys, [edited_pendency.id]: edited_pendency })
       setSuccess(true)
+      setTimeout(() => {
+        setVisible(false)
+      }, 2000)
     } catch (err) {
       console.log('error:', err)
     }
@@ -104,7 +108,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
             />
           </Form.Group>
           <Message positive hidden={!success} header="Salvo com Sucesso" />
-          <Form.Button content="Salvar" />
+          <Form.Button disabled={success} content="Salvar" />
         </Form>
       </Modal.Content>
     </Modal>
