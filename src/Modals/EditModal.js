@@ -57,6 +57,9 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       let edited_pendency = data.data.updatePendency
       setPendencys({ ...pendencys, [edited_pendency.id]: edited_pendency })
       setSuccess(true)
+      setTimeout(() => {
+        setVisible(false)
+      }, 2000)
     } catch (err) {
       console.log('error:', err)
     }
@@ -104,7 +107,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
             />
           </Form.Group>
           <Message positive hidden={!success} header="Salvo com Sucesso" />
-          <Form.Button content="Salvar" />
+          <Form.Button disabled={success} content="Salvar" />
         </Form>
       </Modal.Content>
     </Modal>

@@ -77,10 +77,9 @@ const CreateModal = ({ token, visible, setVisible, pendencys, setPendencys }) =>
       let new_pendency = data.data.createPendency
       setPendencys({ ...pendencys, [new_pendency.id]: new_pendency })
       setSuccess(true)
-      // await setTimeout(() => {
-      //   setSuccess(true)
-      //   setSubmitting(false)
-      // }, 1500);
+      setTimeout(() => {
+        setVisible(false)
+      }, 2000)
     } catch (err) {
       console.log('error:', err)
     }
@@ -136,7 +135,7 @@ const CreateModal = ({ token, visible, setVisible, pendencys, setPendencys }) =>
           />
         </Form.Group>
         <Message positive hidden={!success} header='Criado com Sucesso'/>
-        <Form.Button content='Criar' />
+        <Form.Button content='Criar' disabled={success}/>
       </Form>
       </Modal.Content>
     </Modal>
