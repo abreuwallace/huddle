@@ -16,7 +16,7 @@ const MenuIcons = styled(Menu.Menu)`
   width: 18vw;
 `
 
-const HuddleHeader = ({ token, setToken, pendencys, setPendencys, notifications }) => {
+const HuddleHeader = ({ token, setToken, pendencys, setPendencys, notifications, newsCount, setNewsCount }) => {
   const [visible, setVisible] = useState(false)
 
   function logout() {
@@ -51,7 +51,7 @@ const HuddleHeader = ({ token, setToken, pendencys, setPendencys, notifications 
 
         <Menu.Item position="right">
           {/* <Icon name="alarm" /> */}
-          <NotificationDropdown notifications={notifications} />
+          <NotificationDropdown notifications={notifications} newsCount={newsCount} setNewsCount={setNewsCount} />
           Notificação
         </Menu.Item>
         <Dropdown item button direction="left" icon="user">

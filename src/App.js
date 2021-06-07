@@ -19,6 +19,7 @@ function App() {
   const [token, setToken] = useState()
   const [pendencys, setPendencys] = useState({})
   const [notifications, setNotifications] = useState({})
+  const [newsCount, setNewsCount] = useState(0)
 
   useEffect(() => {
     if (token?.id) {
@@ -31,13 +32,25 @@ function App() {
       next: ({ provider, value }) => {
         //console.log('createSub', { value, pendencys, provider })
         const newPendency = value.data.onCreatePendency
-        if (!pendencys[newPendency.id]) setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+        if (!pendencys[newPendency.id]) {
+          setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+          setNotifications({
+            ...notifications,
+            [newPendency.id]: {
+              name: `Pendência ${newPendency.name}`,
+              when: `Criada ${moment(newPendency.createdAt).fromNow()}`,
+              time: newPendency.createdAt,
+              icon: 'plus',
+            },
+          })
+          setNewsCount(newsCount + 1)
+        }
       },
       error: (error) => console.warn('error', error),
     })
 
     return () => sub.unsubscribe()
-  }, [pendencys])
+  }, [pendencys, notifications, newsCount])
 
   useEffect(() => {
     const sub = API.graphql(graphqlOperation(onUpdatePendency)).subscribe({
@@ -45,12 +58,22 @@ function App() {
         //console.log('updateSub', { value, pendencys, provider })
         const newPendency = value.data.onUpdatePendency
         setPendencys({ ...pendencys, [newPendency.id]: newPendency })
+        setNotifications({
+          ...notifications,
+          [newPendency.id]: {
+            name: `Pendência ${newPendency.name}`,
+            when: `Alterada ${moment(newPendency.updatedAt).fromNow()}`,
+            time: newPendency.updatedAt,
+            icon: 'edit',
+          },
+        })
+        setNewsCount(newsCount + 1)
       },
       error: (error) => console.warn('error', error),
     })
 
     return () => sub.unsubscribe()
-  }, [pendencys])
+  }, [pendencys, notifications, newsCount])
 
   useEffect(() => {
     const sub = API.graphql(graphqlOperation(onDeletePendency)).subscribe({
@@ -58,12 +81,22 @@ function App() {
         //console.log('onDeletePendency', { value, pendencys, provider })
         const deletedPendency = value.data.onDeletePendency
         setPendencys(_.omit(pendencys, deletedPendency.id))
+        setNotifications({
+          ...notifications,
+          [deletedPendency.id]: {
+            name: `Pendência ${deletedPendency.name}`,
+            when: `Removida ${moment().fromNow()}`,
+            time: new Date().toISOString(),
+            icon: 'trash',
+          },
+        })
+        setNewsCount(newsCount + 1)
       },
       error: (error) => console.warn('error', error),
     })
 
     return () => sub.unsubscribe()
-  }, [pendencys])
+  }, [pendencys, notifications, newsCount])
 
   // token.profile:
   // 0: admin/gestorGeral	verTudo  - gerenciarTudo
@@ -134,6 +167,8 @@ function App() {
           pendencys={pendencys}
           setPendencys={setPendencys}
           notifications={notifications}
+          newsCount={newsCount}
+          setNewsCount={setNewsCount}
         />
       </Grid.Row>
       {token?.profile > 1 && (
