@@ -23,7 +23,7 @@ const ChangeStatusModal = ({ visible, setVisible, pendency, pendencys, setPenden
       setSubmitting(false)
       setSuccess(false)
     }
-  }, [visible, pendency])
+  }, [visible])
 
   async function handleSubmit() {
     setSubmitting(true)

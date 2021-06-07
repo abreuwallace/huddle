@@ -26,7 +26,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       setSuccess(false)
       setErrorDeadline(false)
     }
-  }, [visible, pendency])
+  }, [visible])
 
   const validateFields = () => {
     let isValid = true
@@ -52,6 +52,7 @@ const EditModal = ({visible, setVisible, pendency, pendencys, setPendencys}) => 
       deadline: moment(deadline,moment_format).toISOString(),
       equipment: equipment
     }
+    console.log(pendency_, name, local)
     try {
       let data = await API.graphql(graphqlOperation(updatePendency, { input: pendency_ }))
       let edited_pendency = data.data.updatePendency
